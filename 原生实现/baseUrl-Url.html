@@ -1,0 +1,75 @@
+<script>
+
++ function fullUrl(baseUrl, url) {
+  // 想要的效果是: 无论baseUrl结尾 有没有/  或者 ur 前面有没有/  最后合成的 url 都是正确的
+  baseUrl = 'https://www.baidu.com/public/v1'
+  url = 'home' 
+  let fullUrl
+
+  // baseUrl 结尾处是否存在 /
+  // url 开头处是否存在 /
+  let endIsHave = /\/$/.test(baseUrl)
+  let startIsHave = /^\//.test(url)
+
+  if (endIsHave && startIsHave) {  // 开头 和 结尾是否都有 /
+   
+    fullUrl = baseUrl + url.replace(/^\//, '')
+  } else if (!endIsHave && !startIsHave) { // 开头没写 /  结尾没写 /
+    fullUrl = baseUrl + '/' + url
+  } else {
+    fullUrl = baseUrl + url
+  }
+
+  console.log(fullUrl)
+  /**
+   * String.prototype.startsWith() 是否以某一个字符开始
+   * String>prototype.endsWith()   是否以某个字符结束
+  */
+}()                           
+String.prototype.endsWith = function(str) {
+  return new RegExp(str + '$').test(this)
+}
+String.prototype.startsWith = function(str) {
+  return new RegExp('^' + str).test(this)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

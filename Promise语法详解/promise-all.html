@@ -1,0 +1,35 @@
+<script>
+    
+
+    const p2 = Promise.resolve(2);   // 异步回调  会返回一个 promise 实例对象
+    const p1 = new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve(1);  // 异步回调
+        }, 300)
+        
+    });
+    const p3 = Promise.reject(3);    // 异步回调  会返回一个 promise 实例对象
+    const p4 = Promise.reject(4);
+
+    // 获得 异步操作结果
+    // Promise.all([]) 传递的参数是数组, 每个元素是 promise实例对象
+    // Promise.all([]) 返回的也是 一个 promise 实例对象
+    // all 所有的 操作都要成功 才可以.   p3 是执行的 reject() 失败
+    
+    const pAll = Promise.all([p1, p2]);
+    pAll.then(
+        values => {
+            // 如果都成功, 返回所有的 异步操作结果,
+            // 结果的顺序 是按照 Promise.all([]) 数组元素的位置, 一一对应
+            console.log('all onResolve', values);
+        },
+        reason => {
+            // 如果有失败的那么, 就返回第一个失败的状态, 而不是所有的
+            console.log('all onReject', reason);
+        }
+    )
+
+    // *********** 为什么会报错呢  还比较奇葩
+    
+
+</script>

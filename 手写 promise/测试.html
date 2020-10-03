@@ -1,0 +1,223 @@
+<!-- <script src="./Promise.js"></script> -->
+<script src="./Promise-then5完结.js"></script>
+<div>1234</div>
+
+<script>
+    // setTimeout(function() {
+    //     console.log('timeout callback 1');
+    //     Promise.resolve(5).then(value => console.log(value));
+    // });
+
+    // setTimeout(function() {
+    //     console.log('timeout callback 2');
+    // });
+
+    // Promise.resolve(3).then(value => console.log(value));
+    // Promise.reject(4).catch(reason => console.log(reason));
+    // // 每执行一个 宏任务时, 都要把 微任务队列中的任务 全执行完, 然后再去 执行这个 宏任务
+
+
+
+
+    // setTimeout(function() {
+    //     console.log(111);
+    // });
+    // new Promise((resolve, reject) => {
+    //     console.log(222);
+    //     resolve();
+    // }).then(()=> {
+    //     console.log(333);
+    // }).then(()=> {
+    //     console.log(444);
+    // })
+
+    // console.log(555);
+
+    
+
+
+
+
+    // // 这个 牛逼啊!!! 不分析细节, 会错的很惨. 
+    // setTimeout(() => {
+    //     console.log('0');
+    // });
+
+    // new Promise((resolve, reject) => {
+    //     console.log('1');
+    //     resolve();
+    // }).then(() => {
+    //     console.log('2');
+    //     new Promise((resolve, reject) => {
+    //         console.log('3');
+    //         resolve();
+    //     }).then(() => {
+    //         console.log('4');
+    //     }).then(() => {
+    //         console.log('5');
+    //     })
+    // }).then(() => {
+    //     console.log('6');
+    // })
+
+    // new Promise((resolve, reject) => {
+    //     console.log('7');
+    //     resolve();
+    // }).then(() => {
+    //     console.log('8');
+    // });
+
+    
+    /*
+    真正意义上去解决异步回调的问题, 同步流程表达异步操作
+    本质: Generator的语法糖
+
+    async function foo() {
+        await 异步操作
+        await 异步操作  上面的完成了, 这里才会执行
+    }
+
+    特点: 
+        不需要像Generator去调用 next方法, 遇到 await 等待, 当前的异步操作完成就往下执行
+        返回的总是Promise对象
+        async 取代 Generator函数的星号, await 取代 yield
+        语义上更明确 
+        
+    */
+
+    // function test(x1, x2) {
+    //     console.log(x1, x2);
+    // }
+
+    // setTimeout(test, 2000, 10, 20);
+
+  
+    
+
+    function* myGenerator() {
+        yield 1;
+        yield 2;
+        yield 3;
+        yield 4;
+        return 'return';
+    }
+
+    
+    let obj = {
+        name: 'GaoWuJie',
+        age: 21,
+        height: 174,
+        [Symbol('test')]: 'test',
+        [Symbol('id')]: '410'
+    };
+
+    Object.prototype[Symbol.iterator] = function* myGenerator() {
+        // this => 不是 生成的 Iterator 对象, 
+        // this => 还是指向 调用该方法的 调用者对象
+
+        var keys = Reflect.ownKeys(this);
+        for (let i = 0; i < keys.length; i++) {
+            yield this[keys[i]];
+        }
+    };
+
+    class Test {
+        static data = {};
+        static set(name, value) {
+            this.data[name] = value;
+            // 这里的 this 是Test 函数对象
+        }
+        static get(name) {
+            return this.data[name];
+        }
+
+        constructor() {
+            // 这函数里面的 this 是 new 之后的 实例对象
+        }
+    }
+
+    let set = new Set('GaoWuJie');
+    
+    for (let v of set) {
+        // 其实是找  set[Symbol.iterator] === set.values  true
+        // v 是 set[Symbol.iterator]().next() => {value:x, done: false}
+        console.log(v);
+    }
+
+
+    let a = new Set([1,2,3,4]);
+    let b = new Set([2,3,4,5,6]);
+
+    // 并集
+    let c = new Set([...a, ...b]);
+
+    // 交集
+    let jiao = [...a].filter(item => b.has(item));
+
+    // 差集 a中有的  b中没有的
+    let acha = [...a].filter(item => !b.has(item))
+
+    // WeakSet 只能放引用类型的值 不能放重复的引用值
+
+    
+
+    
+    
+
+    
+
+    let GWJ = {name: 'GaoWuJie'};
+    let edu = GWJ;
+    let set2 = new WeakSet();
+    set2.add(GWJ);
+
+    GWJ = null;
+    edu = null;
+
+
+    //----------------------------------------------------------------- Map
+    // Map() 构造函数  接收的参数, 要具有 Iterator
+
+    let map = new Map([['name', 'GaoWuJie']]);
+
+    map
+        .set('age', 21)
+        .set('height', 174);
+
+    // map.forEach((item, index) => {
+    //     console.log(item, index);
+    //     // item 是键值
+    //     // index 是键名
+    // });
+
+    // map.entries() 返回 键值对 接口对象
+    // {value: [key, value], done: false};
+    
+    
+    [...map.values()].filter(item => 21);
+
+
+    //---------------------------------------------------- WeakMap
+    let gwj = {name: 'gwj'};
+    let qbl = gwj;
+    // 引用 2次
+
+    
+
+    let map1 = new WeakMap();
+    map1.set(gwj, '111');
+
+    gwj = null;
+    qbl = null;
+
+    console.log(map1);
+
+    // 这里不增加 引用次数. 
+
+    
+
+
+
+
+
+</script>

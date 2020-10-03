@@ -1,0 +1,40 @@
+<script>
+
+    // 产生一个成功值为 1 的 promise对象
+    const p1 = new Promise((resolve, reject) => {
+        resolve(1); // 异步回调
+    });
+
+    const p2 = Promise.resolve(2);
+    const p3 = Promise.reject(3);
+
+    // 获得结果
+    p1.then(value => {
+        // 这里面的代码 全是 异步代码 
+        // 这个箭头函数 就是个  异步函数
+        console.log(value);
+    });
+
+    p2.then(value => {
+        console.log(value);
+    });
+
+    p3.catch(reason => {
+        console.log(reason);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

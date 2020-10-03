@@ -1,0 +1,48 @@
+<script>
+    /*
+    1. 如何改变 promise 的状态
+      (1) resolve(value): 如果当前是 pendding 就会变为 resolved
+      (2) reject(reason): 如果当前是 pendding 就会变为 rejected
+      (3) 抛出异常: 如果当成是 pendding 就会变为 rejected
+                不管是手动的, 还是 内置抛出的错误 都一样. 
+    */
+
+    const p1 = new Promise((resolve, reject) => {
+        // resolve(1);  由 pedding 变为 resolved
+        // reject(2);   由 pedidng 变为 rejected
+        // throw '错误';   // throw 后面的传给了  reject(...)
+        // throw new Error('未知错误'); // 但是整个程序不会终止执行
+
+        xxx;  // 这样的错误 也不会终止整个程序的执行, 而是 由 pendding 变为 rejected, 执行 reject(...)
+    });
+    p1.then(
+        value => {
+            console.log(value);
+        },
+        reason => {
+            console.log('reason1', reason);
+        }
+    );
+
+
+    /*
+    2. 一个 promise 指定多个 成功/失败回调函数, 都会调用?
+            是的
+    */
+    p1.then(
+        value => {
+            console.log(value);
+        },
+        reason => {
+            console.log('reason2', reason);
+        }
+    );
+
+
+
+
+
+
+
+
+</script>

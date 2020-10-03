@@ -1,0 +1,101 @@
+<script>
+    const p1 = new Promise((resolve, reject) => {   // 执行器函数
+        // 执行 异步操作任务
+        // JS引擎主线程
+
+        console.log('Promise 里面');
+        setTimeout(() => {
+            const time = Date.now();
+            if (time % 2 === 1) {
+                resolve('成功的数据' + time);
+                console.log('resolved() 之后')
+            } else {
+                reject('失败的数据' + time);
+                console.log('rejected() 之后');
+            }
+        }, 1000);
+    });
+
+    console.log('then() 之前');
+
+    // then 里面的就是   异步回调代码 等待同步任务执行完毕后,  开始把 任务队列中的代码  放入主线程
+    p1.then(
+        value => {      // onResolved
+            // value 就是 成功的 数据
+            console.log(value);
+        }, 
+        reason => {     // onRejected
+            // reason 就是 失败的 数据
+            console.log(reason)
+        }
+    )
+
+    console.log('最后');
+
+
+    //--------------------------------------------细节2
+    new Promise((resolve, reject) => {
+        console.log('细节2');
+        resolve();
+    }).then(null); // 没有定义 也不报错
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

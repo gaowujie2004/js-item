@@ -1,0 +1,54 @@
+<script>
+    /*
+    4. promise.then() 返回新的 promise的结果状态由什么决定?
+        (1)简单表达: 由then()指定的 回调函数执行的结果决定
+        (2)详细表达:
+            1. 如果抛出异常(手动或者系统抛出), 新的 promise 的状态为 rejected, reason 为抛出的异常
+            2. 如果 return 非promise的值, 新的 promise 的状态为 resolved, value 为 return 后面的值
+            3. 如果 return promise值, 此promise的结果就会成为新的promise的结果
+
+    */
+
+    const p = new Promise((resolve, reject) => {
+        resolve(111);  // 这里面的都是 同步执行
+    });
+
+    p.then(
+        value => {    // 这个是 异步回调函数  怎么证明    微任务
+            console.log(value);
+        },
+        reason => {   // 这个是 异步回调函数  怎么证明    微任务
+            console.log(reason);
+        }
+    );
+    // .then() 这个肯定是同步代码 会立即执行 then函数 因为你调用了
+
+
+    //--------------------------------------------------------------------------
+    new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve(1); 
+        }, 400);       
+    }).then(
+        value => {
+            console.log('onResolved 1', value);
+            // throw 5;
+            // return 6;
+            // return Promise.reject(7);
+            // return Promise.resolve(8);
+        },
+        reason => {
+            console.log('onRejected 1', reason);
+        }
+    ).then(
+        value => {
+            console.log('onResolved 2', value);
+        },
+        reason => {
+            console.log('onRejected 2', reason);
+        }
+    )
+
+    // .then 这些是同步代码   很块执行的. 就是里面的 函数参数  是 异步回调的
+
+</script>

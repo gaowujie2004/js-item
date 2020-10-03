@@ -1,0 +1,26 @@
+<script>
+    const p1 = new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve(1);  // 异步回调
+        }, 300)
+        
+    });
+
+    const p2 = Promise.resolve(2);   // 异步回调  会返回一个 promise 实例对象
+    const p3 = Promise.reject(3);    // 异步回调  会返回一个 promise 实例对象
+    const p4 = Promise.reject(4);
+
+    // 传递一个数组, 元素是 promise 实例对象
+    // race 竞赛, 多个异步操作看那个 返回先有结果的, 无论是成功还是失败. 
+    // 先在前面的 不一定先 有结果, 这得看 服务器 
+    const pRace = Promise.race([p1, p2, p3, p4]);
+    pRace.then(
+        value => {
+            console.log('race onResolve', value);
+        },
+        reason => {
+            console.log('race onReject', reason);
+        }
+    );
+    // 返回的结果是 p2 的, 因为 p1 被延迟了
+</script>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮2</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        button { border: none; outline: none; }
+        input {border: none; outline: none;}
+        html { background-color: #000; }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            color: #fff;
+            font-size: 20px;
+            padding: 10px 20px;
+            height: 2em;
+            line-height: 2em;
+            border: 2px solid red;
+            border-radius: 1000px;
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .container span {
+            position: absolute;
+            border-radius: 50%;
+            transform-origin: center;
+            transform: translate(-50%, -50%);
+
+            animation: move .5s linear;
+
+        }
+
+        @keyframes move {
+            0% {
+                width: 20px;
+                height: 20px;
+                background-color: #fff;
+            }
+            100% {
+                width: 70px;
+                height: 70px;
+                opacity: .2;
+                background-color: #fff;
+                
+            }
+        }
+        
+
+
+        
+        
+
+
+
+        
+        
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        BUTTON
+    </div>
+
+    
+
+
+
+    <script>    
+        let $button = document.querySelector('.container');
+        $button.onclick = function(ev) {
+            let x = ev.offsetX;
+            let y = ev.offsetY;
+
+            var $span = document.createElement('span');
+            this.appendChild($span);
+            $span.style.left = x + 'px';
+            $span.style.top = y + 'px';      
+
+            setTimeout(() => {
+                this.removeChild($span);
+            }, 500);
+            
+        };
+
+
+    </script>
+</body>
+</html>

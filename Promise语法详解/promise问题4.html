@@ -1,0 +1,61 @@
+<script>
+    /*
+    5. promise 如何串联多个操作任务?
+    其实就是 解决回调地狱
+    后面的then()执行,
+    取决于 上面的 then() 执行 
+
+    任务2 是以 任务1 为条件的
+    */
+
+    /*
+    预备知识
+    */
+    new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve(1);
+            // 现在是先指定回调函数(异步), 后 改变状态,  只有两种同时满足  .then 里面的回调函数 才会执行
+            // 等 0.4 秒后, then() 里面的回调函数 才执行
+        }, 400);
+    })
+    .then(
+        value => {
+            console.log(value);
+        },
+        reason => {
+            console.log(reason);
+        }
+    );
+
+
+    /*
+        开始
+    */
+    new Promise((resolve, reject) => {
+        setTimeout(function() {
+            console.log('执行任务1(异步)');
+            resolve(1)
+        }, 400);
+    })
+    .then(value => {
+        console.log('任务1的结果', value);
+        console.log('执行任务2(同步)');
+        return 2;
+        // 返回一个新的 promise 对象, 状态是 resolved, value是2
+    })
+    .then(value => {
+        console.log('任务2的结果', value);
+        console.log('执行任务3(异步)');
+        return new Promise((resolve, reject) => {
+            setTimeout(function() {
+                console.log('任务3开始执行');
+                resolve(3);
+                // 上面 两行代码  颠倒顺序 无所谓, 因为  conso... 是同步代码啊
+                // resolve 是 异步代码 微任务
+            }, 400);
+        });
+    })
+    .then(value => {
+        console.log('任务3的结果', value);
+    })
+</script>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html { background-color: #222; height: 100%;}
+        body { height: 100%; }
+        svg { height: 100%; display: block; }
+        * { margin: 0; padding: 0; }
+        
+        @keyframes text1 {
+            to {
+                stroke-dasharray: 20, 40;
+                stroke-dashoffset: -40;
+            }
+        }
+        @keyframes text2 {
+            to {
+                stroke-dasharray: 20, 40;
+                stroke-dashoffset: -60;
+            }
+        }
+        @keyframes text3 {
+            to {
+                stroke-dasharray: 20, 40;
+                stroke-dashoffset: -80;
+            }
+        }
+        
+
+        text:nth-of-type(1) {
+            stroke: #2c3e50;
+            animation: text1 2s 1s forwards;
+
+        }
+        text:nth-of-type(2) {
+            stroke: #8e44ad;
+            animation: text2 2s 1s forwards;
+ 
+        }
+        text:nth-of-type(3) {
+      
+            stroke: #2980b9;
+            animation: text3 2s 1s forwards;
+
+        }
+
+        text {
+            stroke: #fff;
+            fill: none;
+            stroke-width: 3;
+            font-size: 95px;
+            text-anchor: middle;
+            letter-spacing: 10px;
+
+            stroke-dasharray: 0,300;
+        }
+        
+    </style>
+    <title>绚丽线条</title>
+    
+</head>
+<body>
+
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%">
+            <text x="50%" y="60%" id="text">19910311 孔凡魁</text>
+            <text x="50%" y="60%" id="text">19910311 孔凡魁</text>
+            <text x="50%" y="60%" id="text">19910311 孔凡魁</text>
+        </svg>
+
+
+
+
+
+    
+</body>
+</html>

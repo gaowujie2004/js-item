@@ -1,0 +1,85 @@
+<script>
+
+    /*
+        6. promise 异常传(穿)透
+          (1) 当使用promise的then链式调用, 可以在最后指定失败的回调
+          (2) 前面的任何操作出了异常, 都会传到最后失败的回调处理
+
+        7. 终断promise链
+            返回一个 pending 状态的 promise对象即可
+    */
+    new Promise((resolve, reject) => {
+        reject(1);
+    })
+    .then(
+        value => {
+            console.log('on-resolved111()', value)
+        }
+        // 不写 失败状态下的 回调函数 默认会这样做:
+        /*
+        reason => {throw reason 新返回的promise对象 的状态是 rejected}
+        或者
+        reason => Promise.reject(reason)
+        */
+    )
+    .then(
+        value => {
+            console.log('on-resolved222()', value)
+        }
+        // 不写 失败状态下的 回调函数 默认会这样做:
+        /*
+        reason => {throw reason 新返回的promise对象 的状态是 rejected}
+        */
+    )
+    .then(
+        value => {
+            console.log('on-resolved333()', value)
+        }
+        // 不写 失败状态下的 回调函数 默认会这样做:
+        /*
+        reason => {throw reason 新返回的promise对象 的状态是 rejected}
+        */
+    )
+    .catch(reason => {
+        console.log(reason);
+    });
+
+
+    // ------------------------------------------------------------------ 中断
+    new Promise((resolve, reject) => {
+        reject(2);
+    })
+    .then(
+        value => {
+            console.log('on-resolved111()', value)
+        }
+    )
+    .catch(
+        reason => {
+            console.log('catch', reason);
+            return new Promise(()=>{});
+        }
+    )
+    .then(
+        value => {
+            console.log('on-resolved222()', value)
+        },
+        reason => {
+            console.log('on-rejected222()', reason);
+        }
+    )
+    .then(value => {
+        // 无效无效无效无效无效无效
+        console.log('终端后')
+    });
+
+
+
+
+
+
+
+
+
+
+</script>

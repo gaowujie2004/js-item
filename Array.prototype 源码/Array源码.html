@@ -1,0 +1,180 @@
+<script>
+
+Array.prototype.myFind = function(callback, bang) {
+    // callback 同步回调函数
+    "use strict";
+    const len = this.length;
+    for (let i = 0; i < len; i++) {
+        if (callback(this[i], i, this)) return this[i];
+    }
+
+    return undefined;
+};
+
+// arr.myFind( function(item, index) {
+//     return item === 2;
+// })    
+
+
+Array.prototype.myFindIndex = function(callback, bang) {
+    "use strict";
+    const len = this.length;
+    for (let i = 0; i < len; i++) {
+        if (callback(this[i], i, this)) return i;
+    }
+
+    return undefined;
+}
+
+
+Array.prototype.each = function(callback, bang) {
+    // map 和 forEach 的结合
+    // return false 就退出循环
+    "use strict";
+    const len = this.length;
+    const arr = [];
+    for (let i = 0; i < len; i++) {
+        let res = callback.call(bang, this[i], i, this);
+        if (res === false) {
+            break;
+        } else {
+            arr.push(res)
+        }
+    }
+
+    return arr;
+};
+
+
+
+// 扁平化数组
+arr = [1, 2, [3,4, [5,6]], [7,8], 9, 10]
+
+
+function test(t1, t2, t3) {
+    console.log(t1, t2, t3, this);
+}
+
+
+
+
+// 代码 全部使用 ES5
+// 模拟 call
+Function.prototype._call = function(ctx) {
+    var args = [];
+    for (var i=1, len=arguments.length; i<len; i++) {
+        args.push('arguments[' + i +']');
+    }
+
+    if (ctx===null || ctx===undefined) return eval('this('+ args.join() +')');
+
+    ctx = Object(ctx);
+    ctx.fn = this;
+    var result = eval('ctx.fn(' + args.join() + ')');
+
+    return result;
+}
+
+// 模拟 apply
+Function.prototype._apply = function(ctx, arr) {
+    var args = [];
+    for (var i=0, len=arr.length; i<len; i++) {
+        args.push('arr['+ i +']');
+    }
+
+    if (ctx===null || ctx===undefined) {
+        return eval('this(' + args.join() +')') 
+    } else {
+        ctx = Object(ctx);
+        ctx.fn = this;
+        var result = eval('ctx.fn('+ args.join() +')')
+        delete ctx.fn;
+        return result;
+    }
+}
+
+// 模拟 bind
+Function.prototype._bind = function() {
+
+    var _this = this;
+    var ctx = [].shift.call(arguments);
+    var outArr = arguments;
+    var outArr2 = [];
+
+    for (var i=0, len=arguments.length; i<len; i++) {
+        outArr2.push('outArr['+ i +']')
+    }
+
+    return function() {
+        var innerArr = [];
+        var result;
+        for (var j=0, n=arguments.length; j<n; j++) {
+            innerArr.push('arguments[' + j +']')
+        }
+
+        if (ctx===null || ctx===undefined) {
+            return eval('_this('+ outArr2 + innerArr +')')
+        } else {
+            ctx = Object(ctx);
+            ctx.fn = _this;
+            result = eval('ctx.fn('+ outArr2 + innerArr +')')
+            delete ctx.fn;
+            return result;
+        }
+    }
+}
+
+
+// 重写 concat方法
+// 使用 ES5规范
+Array.prototype._concat = function() {
+    // 如果 _concat() 实参是一个数组, 会把数组中的每一个元素 放进去
+    var newArr = [];
+    for (var k=0; k<this.length; k++) {
+        newArr.push(this[k])
+    }
+
+    for (var i=0, item, len=arguments.length; i<len; i++) {
+        item = arguments[i];
+        if (item instanceof Array) {
+            for (var j=0, n=item.length; j<n; j++) {
+                newArr.push(item[j]);
+            }
+        } else {
+            newArr.push(item);
+        }
+    }
+
+    return newArr;
+};
+
+
+Array.prototype._flat = function() {
+    let arr = this;
+    while (arr.some(Array.isArray)) {
+        arr = [].concat(...arr);
+    } 
+
+    return arr;
+};
+
+arr = [
+    [1, 2, 3, 4, 5],
+    [[2], [3], [4], [5, [6, [7]]]],
+    {name: 11},
+    [
+        {name: 22},
+        {name: 33}
+    ]
+];
+
+
+console.time('flat');
+
+console.log(arr._flat());
+
+console.timeEnd('flat');
+
+
+
+</script>

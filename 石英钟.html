@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>石英钟</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- css组件 -->
+    <!-- <link rel="stylesheet" href="../旅游项目/CSS组件/style.css"> -->
+
+
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        button { border: none; outline: none; }
+        input {border: none; outline: none;}
+        html { background-color: #222; }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .time {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            color: #aaa;
+            /* border: 3px solid rgba(137, 207, 235, .4); */
+            box-shadow: inset 0 0 10px rgba(0,0,0,1);
+
+            position: relative;
+        }
+
+        .number {
+            position: absolute;
+            font-size: 2em;
+            line-height: 100%;
+
+            padding: 10px;
+        }
+        .top {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .right {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .bottom {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .left {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%)
+        }
+        .circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #fff;
+            z-index: 1000;
+        }
+
+        .s {
+            position: absolute;
+            left: calc(50% - 10px);
+            top: calc(50% - 2px);
+            width: 40%;
+            height: 4px;
+            background-color: blue;
+            transform-origin: 10px center;
+            transition: transform .2s;
+
+            border-radius: 5px;
+        }
+        .m {
+            position: absolute;
+            left: calc(50% - 10px);
+            top: calc(50% - 2px);
+            width: 26%;
+            height: 4px;
+            background-color: green;
+            transform-origin: 10px center;
+
+            border-radius: 5px;
+        }
+        .h {
+           
+           position: absolute;
+           left: calc(50% - 10px);
+           top: calc(50% - 2px);
+           width: 20%;
+           height: 4px;
+           background-color: red;
+           transform-origin: 10px center;
+
+           border-radius: 5px;
+       }
+        
+
+        
+        
+        
+        
+
+    </style>
+</head>
+<body>
+    <div class="time">
+        <span class="number top">12</span>
+        <span class="number right">3</span>
+        <span class="number bottom">6</span>
+        <span class="number left">9</span>
+
+        <div class="circle"></div>
+
+        <div class="h"></div>
+        <div class="m"></div>
+        <div class="s"></div>
+        
+        
+    </div>
+
+    <script>
+        let { log,dir } = console;
+        var s = document.querySelector('.s');
+        var m = document.querySelector('.m');
+        var h = document.querySelector('.h');
+
+        var curS = new Date().getSeconds();
+        var curM = new Date().getMinutes();
+        var curH = new Date().getHours();
+        var deg = 6;
+
+        s.style.transform = `rotate(${curS*deg - 90}deg)`;
+        m.style.transform = `rotate(${curM*deg - 90}deg)`;
+        h.style.transform = `rotate(${curH*30 - 90}deg)`;
+
+        setInterval(function() {
+            curS++;
+            s.style.transform = `rotate(${curS*deg - 90}deg)`;
+
+            if (curS%60 === 0) {
+                // 这样写 能解决一个问题
+            
+                curM++;
+
+                m.style.transform = `rotate(${curM*deg - 90}deg)`;
+
+                if (curM%60 === 0) {
+                    // 这样写能解决一个问题
+                    curH++;
+
+                    h.style.transform = `rotate(${curH*30 - 90}deg)`;
+
+                    if (curH%12 === 0) {
+                        curH = 0;
+                    }
+                }
+            }
+        }, 1000);
+    
+    </script>
+
+    <script>
+       
+
+       
+        
+
+        
+    </script>
+</body>
+</html>

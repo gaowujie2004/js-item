@@ -1,0 +1,142 @@
+<script>
+
+    // const p1 = new Promise((resolve, reject) => {
+    //     // JS引擎主线程
+    //     // 同步代码在 主线程上,  异步的代码 被对应的 线程处理放到 任务队列
+    //     // 浏览器中 有多个线程, 但是 JS代码的执行  只有一个线程 
+    //     // 所以  js是单线程,  其他的线程只是 协助, 不负责执行代码
+
+
+        
+    //     console.log('Promise里面的 最先');
+    //     resolve('then');  // 先改变状态, 后指定回调函数, 主线程空闲时,  开始执行回调函数  // 异步的代码  微任务
+    //     console.log('Promise里面的 最后一行');
+
+    // });
+    // p1.then(    
+    //     // then 里面的是 回调函数
+    //     value => {
+    //         console.log(value);
+    //     }
+    // );
+
+    // catch 相当于 then(null, reason => {})
+
+
+    // const p1 = new Promise((resolve, reject) => {
+    //     // 执行器函数 在主线程上执行
+    //     // 执行器函数 是一个 回调函数,  但是 是同步回调  
+    //     reject('error');
+    // });
+    
+    //  指定了 状态 没有指定回调函数 报错
+
+    //     复习promise.html:29 Uncaught (in promise) error
+    // (anonymous) @ 复习promise.html:29
+    // (anonymous) @ 复习promise.html:26
+
+
+    // Promise.all([]) 数组元素要求 是 Promise实例对象   返回一个 Promise 实例对象
+    // 要求 Promise 实例对象 的 状态为  resolved ,即都执行了 resolve();
+        // 返回 所有的 成功结果. 
+        // 返回值是一个数组, 结果按照 all[] 数组里面的 顺序
+        // 相当于在 内部 规定了 嵌套顺序???
+    // 如果有 的实例对象的状态为 rejected(即执行了 reject()) 就返回第一个 的 失败对象 而不是所有的
+
+    // const p1 = new Promise((resolve, reject) => {
+    //     setTimeout(function() {
+    //         resolve(1);
+    //     }, 2000);
+        
+    // });
+
+    // const p2 = new Promise((resolve, reject) => {
+    //     setTimeout(function() {
+    //         resolve(2);
+    //     }, 2000);
+    // });
+
+    // const p3 = new Promise((resolve, reject) => {
+    //     setTimeout(function() {
+    //         reject(3);
+    //     }, 2000);
+    // });
+
+    // const p4 = new Promise((resolve, reject) => {
+    //     setTimeout(function() {
+    //         reject(4);
+    //     }, 2000);
+    // })
+
+    // 必须得调用啊, 那么 指定了状态,  没有指定 回调(then)
+
+    // pAll.then(
+    //     values => {
+    //         console.log(values);
+    //     },
+    //     reason => {
+    //         console.log('第一个失败的', reason);
+    //     }
+    // );
+    
+
+    // const pRace = Promise.race([p1, p2, p3, p4]);
+    // // [] 看这里面的异步操作, 谁先有结果, 就返回谁  无论是成功的状态还是失败的状态
+
+    // pRace.then(
+    //     value => {
+    //         console.log(value);
+    //     },
+    //     reason => {
+    //         console.log(reason);
+    //     }
+    // );
+
+
+    // 返回一个成功值为2 的 Promise 实例对象
+    // const p = Promise.resolve(2);
+    
+
+    // 先指定状态,  然后指定回调函数
+    // const p = Promise.reject('no');
+    // const p2 = Promise.resolve('yes');
+    
+    // 如何改变  pedding 的状态
+        // 1. 调用 resolve() 状态由 pedidng -> resolved 
+        // 2. 调用 reject() 状态由 pedding -> rejected 
+        // 3. 在 执行器中  有错误代码 或者 手动报错, 会变为 rejected 状态
+    // 说明: 状态只能改变一次. 
+    // 执行器里面有  resolve()  reject() 只会执行其中一个  
+    // 执行器函数  是同步调用  执行器函数里面的代码 都加到 主线程中
+
+
+    // 一个promise 对象, 指定多个  成功/失败回调函数 , 都会调用吗?
+    // const p = Promise.resolve('OK');
+
+    // p.then(value => {
+    //     console.log(value);
+    // });
+
+    // p.then(value => {
+    //     console.log(value);
+    // });
+    
+    // 改变 状态和 指定回调函数 谁先先后?
+    //  都有可能.
+    //  常规: 先指定回调函数,  后改变状态 (不理解)
+    const p = new Promise((resolve, reject) => {
+        setTimeout(()=> {
+            // throw new Error('test'); 这一段 不会被 p.catch() 捕获. 以为是全局的
+            reject(new Error('test'));
+        }, 1000)
+
+        // 先指定 回调, 先把回调保存起来, 等待 状态改变, 一旦状态改变, 就执行对应的  回调函数(异步)
+        
+    });
+
+    p.catch(reason => {
+        console.log(reason);
+    });
+    
+
+</script>

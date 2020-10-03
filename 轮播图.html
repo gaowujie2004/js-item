@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>轮播图</title>
+  <style>
+    html {
+      height: 2000px;
+    }
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .clearfix::before {
+      content: "";
+      height: 0;
+      display: block;
+      clear: both;
+      visibility: hidden;
+    }
+
+    .container {
+      width: 100%;
+      overflow: hidden;
+    }
+
+
+    .swiper {
+      width: 400vw;
+      transition: margin 1s;
+    }
+    
+
+    .swiperItem {
+      width: 100vw;
+      float: left;
+
+      
+    }
+    img {
+      display: block;
+      width: 100vw;
+      height: 50vh;
+      object-fit: cover;
+      object-position: center;
+    }
+    
+   
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="swiper clearfix">
+      <div class="swiperItem">
+        <img src="E:\\web前端\\public\\img\\1.jpg" alt="">
+      </div>
+      <div class="swiperItem">
+        <img src="E:\\web前端\\public\\img\\2.jpg" alt="">
+      </div>
+      <div class="swiperItem">
+        <img src="E:\\web前端\\public\\img\\3.jpg" alt="">
+      </div>
+      <div class="swiperItem">
+        <img src="E:\\web前端\\public\\img\\4.jpg" alt="">
+      </div>
+    </div>
+  </div>
+  <script>
+    let swiper = document.querySelector('.swiper');
+
+    let v = 1;
+    let i = 1;
+    
+    let change = ()=> {
+      swiper.style.marginLeft = `-${i*100}vw`;
+      i+=v;
+      if (i>3) i=0;
+    };
+    let timeout = setInterval(change , 2400);
+
+    swiper.addEventListener('mouseenter', ()=> {
+      clearInterval(timeout);
+    })
+    swiper.addEventListener('mouseleave', ()=> {
+      timeout = setInterval(change , 2400);
+    })
+    
+
+
+    
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+        function loadImage(src, resolve, reject) {
+            let img = new Image();
+            img.src = src;
+            img.onload = function(ev) {
+                resolve(img);
+            };
+            // resolve这个回调函数 被相关的线程处理, 如果 url响应成功, 那么调用这个函数
+            img.onerror = function(ev) {
+                reject(ev);
+            }
+        }
+        loadImage(
+            '../../public/img/nc.jpg',
+            (img) => {
+                document.body.appendChild(img);
+            },
+            (err) => {
+                console.log('图片加载失败', err);
+            }
+        );
+        console.log('函数之后');
+
+
+
+        //----------------------------------------------------------------------- 加载 脚本
+        
+        // function loadScript1(src, resolve, reject) {
+        //     let script = document.createElement('script');
+        //     // 必须得放入 要不然 on...  无法触发
+        //     document.body.appendChild(script);
+
+        //     // 交给 对应的 线程处理, 一旦接收到响应 开始 触发对应的回调函数 将对应的回调函数 放入任务队列
+        //     script.onload = resolve;
+        //     script.onerror = reject;
+        //     script.src = src;
+            
+            
+        // }
+
+        // /*
+        // loadScript1(
+        //     'father.js',
+        //     ()=> {
+        //         father();
+        //     },
+        //     ()=> {
+        //         console.log('father error');
+        //     }
+        // );
+        // loadScript1(
+        //     'son.js',
+        //     ()=> {
+        //         father();
+        //     },
+        //     ()=> {
+        //         console.log('son error');
+        //     }
+        // );
+        // */
+        
+        // // 这样会导致一个问题, 就是 有可能是 son.js 里面的回调函数 先被放如 任务队列, 那么就会报错
+        // // 所以需要  回调嵌套
+        // loadScript1('father.js', ()=> {
+        //     father();
+        //     loadScript1('son.js', ()=> {
+        //         father();
+        //     });
+        // })
+
+        
+
+        // ------------------------------------------------------------------------------Promise 加载脚本
+        /*
+        function loadScript2(src) {
+            return new Promise((resolve, reject) => {
+                let script = document.createElement('script');
+                // 必须得放入 要不然 on...  无法触发
+                document.body.appendChild(script);
+
+                // 交给 对应的 线程处理, 一旦接收到响应 开始 触发对应的回调函数 将对应的回调函数 放入任务队列
+                script.onload = resolve;
+                script.onerror = reject;
+                script.src = src;
+            });
+        }
+
+        loadScript2('father.js')
+        .then(
+            value => {
+                console.log('father.js 加载成功');
+                return loadScript2('son.js');
+            },
+            reason => {
+                console.log('father.js 加载失败');
+            }
+        )
+        .then(
+            value => {
+                father();
+            },
+            reason => {
+
+            }
+        )*/
+
+
+
+        // async 这里, 没有 await 语句 那么就正常执行
+        async function async1() {
+            console.log("async1 start");
+            new Promise(resolve => {
+                console.log('111');
+            })
+            console.log("async1 end");
+        }
+        async1();
+        console.log("start")
+
+        // 剖析
+        // async function async1() {
+        //     console.log('async1 start');
+        //     await async();
+        //     console.log('async1 end');
+
+        // }
+
+        // async function async2() {
+        //     console.log('async2');
+        // }
+
+        // async1();
+        // console.log('start');
+        
+        // 
+        // async function async3() {
+        //     console.log('async1 start');
+        //     new Promise((resolve, reject) => {
+        //         console.log('async2');
+        //         resolve(undefined);
+        //     }).then(ret => {
+        //         console.log('async1 end');
+        //     })
+        // }
+
+        async function test() {
+            let v1 = await new Promise(r => {
+                console.log('delay 10s resolved');
+                setTimeout(r, 10000, '10s');
+            })
+            
+            console.log(v1);
+        }
+
+        
+        const t1 = test();
+        // 状态是  pending, 而且 160 行不输出,  等 10s或 多一点点,  输出 '10s'
+        // 状态也随着改变
+
+
+        
+
+        Promise.resolveDelay = function(value, delay=0) {
+            return new Promise((resolve, reject) => {
+                setTimeout(function() {
+                    resolve(value);
+                }, delay);
+            })
+        };
+
+        Promise.rejectDelay = function(reason, delay=0) {
+            return new Promise((resolve, reject) => {
+                setTimeout(function() {
+                    reject(reason);
+                }, delay);
+            })
+        }
+
+        Promise.resolveDelay(1, 1000).then(value => console.log(value));
+        Promise.resolveDelay(2, 2000).then(value => console.log(value));
+        Promise.resolveDelay(3, 3000).then(value => console.log(value));
+
+
+        
+
+
+    </script>
+    <script>
+        var bbb= 'bbb';
+    </script>
+</body>
+</html>

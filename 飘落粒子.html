@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绚丽星空</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- css组件 -->
+    <!-- <link rel="stylesheet" href="../旅游项目/CSS组件/style.css"> -->
+
+
+    <style>
+        * {margin: 0; padding: 0;}
+        .bg {
+            width: 100%;
+            height: 100vh;
+            background: 
+            radial-gradient(#222, #111, #000) no-repeat;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+        .light {
+            position: absolute;
+            border-radius: 50%;
+            animation-iteration-count: infinite;
+            
+        }
+        
+
+        @keyframes move {
+            0% {  opacity: 1; transform: translate(0px, 0px); }
+            50%, 70% { opacity: 0; transform: translate(200px, 140px); }
+            100%, 80% { opacity: 1; transform: translate(200px, 140px); }
+        }
+
+        #author {
+            position: fixed;
+            top: 2em;
+            right: 2em;
+            color:#fff;
+            text-decoration: none;
+            font-size: 14px;
+
+            transition: color .3s;
+        }
+        #author:hover {
+            color: skyblue;
+        }
+        #author::before {
+            content: "点击查看作者信息";
+            position: absolute;
+            bottom: -5em;
+            right: 0;
+
+            box-sizing: content-box;
+            width: 8em;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255,255,255,.2);
+            box-shadow: 0 0 15px rgba(255,255,255,.3);
+
+            transform: scale(0);
+            transition: transform .3s;
+            transform-origin: right top
+
+        }
+        #author:hover::before {
+            transform: scale(1);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="bg">
+        
+    </div>
+
+    <a id="author" href="./author.html" target="_blank">关于作者</a>
+
+    <script>
+        let { log } = console;
+        (function() {
+            let $bg = document.querySelector('.bg');
+            function random(min, max) {
+                var temp = Math.floor( Math.random()*(max-min+1) + min );
+                return temp;
+            }
+
+            for (let i=0; i<100; i++) {
+                let $circle = document.createElement('div');
+                $circle.className = 'light';
+
+                let width = random(10,55);
+                // 随机大小
+                $circle.style.width = width + 'px';
+                $circle.style.height = width + 'px';
+
+                // 随机位置
+                // 页面大小
+                let htmlW = document.documentElement.clientWidth;
+                let htmlH = document.documentElement.clientHeight;
+                
+
+                $circle.style.left = Math.random()*100 + 'vw';
+                $circle.style.top = Math.random()*100 + 'vh';
+
+                // 随机背景色
+                $circle.style.backgroundColor = 
+                `rgba(${random(0,255)},${random(0,255)},${random(0,255)}, ${Math.random()}`;
+            
+                $circle.style.boxShadow = 
+                `0 0 ${random(10,20)}px rgba(${random(0,255)},${random(0,255)},${random(0,255)},${Math.random()})`;
+
+                $bg.appendChild($circle);
+            }
+
+
+            let $lights = document.querySelectorAll('.light');
+            let lightCount = 0;
+            let t = setInterval(function() {
+
+                if (lightCount >= 100) clearInterval(t);
+
+                $lights[lightCount].style.animationName = `move`;
+                $lights[lightCount].style.animationDuration = '10s';
+
+                lightCount++;
+            }, 400);
+
+
+            let $a = document.querySelector('#author');
+            
+        })();
+
+
+
+        
+    </script>
+</body>
+</html>

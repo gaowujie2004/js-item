@@ -1,0 +1,80 @@
+<script>
+
+    new Promise((resolve, reject) => {
+        reject();
+        resolve();
+        
+    }).then(
+        value => {
+            console.log(value);
+        }
+    ).catch(
+        reason => {
+            console.log('catch()');
+        }
+    );
+    // 相当于 
+    // .then(
+    //     value => {/**/ },
+    //     reason => {/**/}
+    // );
+
+    
+    new Promise((resolve, reject) => {
+        reject();
+    }).catch(reason => {
+        console.log('失败了');
+    });
+    
+    // 相当于
+    new Promise((resolve, reject) => {
+        reject();
+    }).then(
+        null,
+        reason => {
+            console.log('失败了22');
+        }
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

@@ -1,0 +1,64 @@
+<script>
+
+    /*
+    3. 改变 promise 状态和指定回调函数 谁先谁后?
+        (1)都有可能, 常规是: 先指定回调函数, 后改变状态
+        (2)如何先改变状态 再指定 回调函数?
+            一 在执行器中 直接调用 reject/resolve
+            二 延迟更长的时间才调用 then()
+        (3) 什么时候才能得到数据?
+            如果先 指定回调函数, 那当状态发生改变时, 回调函数就会调用, 得到数据
+            如果先 改变状态, 那么当指定回调时, 回调函数就会调用, 得到数据
+    */
+    // 常规: 先指定回调函数, 后改变状态  (不理解)
+
+
+
+
+
+
+
+
+    new Promise((resolve, reject) => {
+        reject(1);     // 先改变状态(同时 指定数据)
+    }).then(           // 后指定 回调函数, 异步执行回调函数 执行哪一个 是由状态决定的. 
+        value => {
+            console.log('resolve1', value);
+        },
+        reason => {
+            console.log('reject1', reason);
+        }
+    );
+
+
+    new Promise((resolve, reject) => {
+        setTimeout(function() {
+            reject(2);      // 后改变状态(同时 传递实参), 执行异步回调函数
+        }, 300);
+    }).then(                // 先指定 回调函数,还没有 状态的信息 所以 先保存当前指定的回调函数
+        value => {
+            console.log('resolve2', value);
+        },
+        reason => {
+            console.log('reject2', reason);
+        }
+    );
+
+
+    // 先 改变状态,  后 指定回调函数
+    const p = new Promise((resolve, reject) => {
+        setTimeout(function() {
+            reject(3);
+        }, 1000);
+    });
+    setTimeout(function() {
+        p.then(
+            value => {
+                console.log('resolve3', value);
+            },
+            reason => {
+                console.log('reject3', reason);
+            }
+        );
+    }, 1500);
+</script>
