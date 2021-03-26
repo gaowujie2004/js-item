@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .father {
+      width: 200px;
+      height: 10px;
+      background-color: pink;
+
+      position: relative;
+
+      cursor: pointer;
+
+      contain: layout, size;
+    }
+    .chunk {
+      height: 20px;
+      width: 3px;
+      background-color: skyblue;
+      position: absolute;
+      top: 50%;
+      transform: translate(0,-50%);
+    }
+    .extend {
+      position: absolute;
+      left: -15px; right: -15px;
+      top: -10px; bottom: -10px;
+    }
+  </style>
+  
+  <!-- <input type="range" oninput="rangeChange(event)"> -->
+  <div class="father">
+    
+    <div class="extend"></div>
+    <div class="chunk"></div>
+  </div>
+
+  
+
+  
+  <script>
+    let father = document.querySelector('.father')
+    let chunk = document.querySelector('.chunk')
+
+    // 第一个: 按住滑块拖动有效   或 点击father 滑动也有效果
+    // 第二个: 点击father, 使 chunk 移动
+
+    // 按住事件
+    father.onselectstart = function() {
+      return false;
+    }
+
+
+    father.onmousedown = function(ev) {
+      console.log('按下了')
+      father.onmousemove = ev => {
+        let offsetX = ev.clientX - ev.currentTarget.getBoundingClientRect().left
+    
+        let chunkLeft = offsetX-3
+        if (chunkLeft <= 0) {
+          chunkLeft = 0
+        }
+
+        if (chunkLeft >= 200) {
+          chunkLeft = 197
+        }
+
+        chunk.style.left = chunkLeft + 'px'
+        console.log(chunkLeft, '最终')
+        ev.stopPropagation()
+      }
+    }
+
+    father.onmouseup = () => {
+      father.onmousemove = null
+    }
+
+    father.onclick = ev => {
+      console.log(ev)
+      let offsetX =  ev.clientX - ev.currentTarget.getBoundingClientRect().left
+      console.log(offsetX)
+
+      if (offsetX<=0) {
+        offsetX = 0
+      }
+      if (offsetX >= 200) {
+        offsetX = 197
+      }
+
+      chunk.style.left = offsetX + 'px'
+    }
+
+    // 拖动事件 - 控制 chunk 移动. 
+    father.onmousemove = null
+
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>input range 美化</title>
+</head>
+<body>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    input {
+      user-select: none;
+      -webkit-appearance: none;
+      appearance: none;
+
+      width: 200px;
+      height: 15px;
+      border: 1px solid red;
+      background-repeat: no-repeat;
+      background-image: linear-gradient(to right, red 0, deepskyblue 200px);
+      background-size: 0% 0%;
+      cursor: pointer;
+      position: relative;
+    }
+    input:focus {
+      outline: none;
+      /* will-change: background-size; */
+    }
+    input::-webkit-slider-thumb {
+      /* 滑动块 */
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background-color: #444;
+      
+    }
+    
+    input::-webkit-slider-runnable-track  {
+      /* 滑动条 轨道 */
+    }
+  </style>
+
+
+  <input type="range" value="30" oninput="valueChange(event)">
+  <input type="range">
+
+  <script>
+    let input = document.querySelector('input')
+    let valueChange = e => {
+      input.style.backgroundSize = `${e.currentTarget.value}%`;
+    }
+    input.style.backgroundSize = `${input.value}%`;
+    
+  </script>
+</body>
+</html>

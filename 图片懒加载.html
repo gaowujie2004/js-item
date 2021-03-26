@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录</title>
+  
+  <style>
+  
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    
+
+    .box {
+      width: 120%;
+      margin-top: 600px;
+      height: 100vh;
+      /* width: 400px; */
+      background-color: pink;
+      /* overflow: auto; */
+    }
+    img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border: 1px solid red;
+      display: block;
+
+      /* content-visibility: auto; */
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="box">
+  </div>
+  <img data-src="./img/1.jpg" alt="">
+  <img data-src="./img/2.jpg" alt="">
+  <img data-src="./img/3.jpg" alt="">
+  <img data-src="./img/4.jpg" alt="">
+  <img data-src="./img/cy.jpg" alt="">
+  <script>
+    let imgs = Array.from(document.querySelectorAll('img'))
+    let box = document.querySelector('.box')
+
+    
+    // 1. offset\client\scroll 
+    let getToRoot = element => {
+      /**
+       * element 元素DOM
+       * 用途: 获取当前元素 距离文档顶部的Y轴距离
+      */
+      // offsetTop 返回的是 当前元素的 border-box 距离 容纳块(offsetParent)
+      // 的内容区的距离.
+      let totalTop = element.offsetTop
+      while ( element = element.offsetParent ) {
+        totalTop += (element.offsetTop+element.clientTop)
+        
+      }
+
+      return totalTop
+    }
+    let one = ev => {
+      let H = window.innerHeight
+      let beforeDistance = 20
+      // 浏览器窗口可视区
+      let S = document.documentElement.scrollTop      // 文档滚动距离
+      // 要获取 img 元素距离 文档顶部的 距离. 
+      // console.log(S);
+      imgs.forEach(el => {
+        let toRootDistance = getToRoot( el )
+        if ( (toRootDistance - S - beforeDistance) <= H ) {
+          el.setAttribute('src', el.getAttribute('data-src'))
+        }
+      })
+
+      // console.log( getToRoot(imgs[0])-S- < H );
+    }
+    // window.addEventListener('scroll', one)
+    
+    // select * from table where ename = "${ename}"
+    // ename = gaowujie" or "1
+
+    // 2. getBoundingClientRect
+    //  图片懒加载, 加载好了就删除掉
+    let two = ev => {
+      let beforeDistance = 60
+      let H = window.innerHeight
+      
+      imgs.forEach( (el,index) => {
+        let top = el.getBoundingClientRect().top
+        if (top-beforeDistance<=H && top>0) {
+          console.log('可见', );
+
+          imgs.splice(index, 1)
+        }
+      })
+
+    }
+    // window.addEventListener('scroll', two)
+
+
+    // 3. IntersectionObserver
+    let three = (entry, obs) => {
+      // console.log(entry, obs);
+
+      entry.forEach(e => {
+        let H = document.documentElement.clientHeight
+        let hTop = e.boundingClientRect.top
+        
+        // 这样做的目的是,  在即将到达视口时发送请求, 而不是当 img标签到达视口时再去发送请求.
+        if (hTop-H <= 70 && hTop>0) {
+          console.log('可以加载了', hTop - H);
+          e.target.setAttribute('src', e.target.getAttribute('data-src'))
+          inter.unobserve( e.target )
+          
+          // 停止对该元素的观察.  不是销毁观察器. 
+        }
+
+      })
+    }
+    let inter = new IntersectionObserver(three, {
+      rootMargin: '70px',
+    })
+    imgs.forEach(el => {
+      inter.observe( el )
+    })
+
+
+  </script>
+</body>
+</html>
