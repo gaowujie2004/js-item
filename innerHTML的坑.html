@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+</style>
+<title> innerHTML的坑 </title>
+</head>
+<body>
+  <div class="father">
+    <h1> 没有被动态修改 </h1>
+    <br><br>
+    <span> innerHTML 会把传入的字符串转成<b>节点对象</b>。不需要手动 document.createElement 然后再 appendChild() </span>
+    <p>
+      那么意味着, 虽然字符串一样,但是 对象已经变了. 
+    </p>
+
+    <button>点击</button>
+  </div>
+  <script>
+    let $ = function(str) {
+      return document.querySelector(str)
+    }
+    let $$ = function(str) {
+        return Array.from(document.querySelectorAll(str))
+    }
+    
+    let father = $('.father')
+    let h1 = $('h1')
+
+    $('button').onclick = function(){
+      setTimeout(_ => {
+        father.innerHTML += '<h2>新的</h2>'
+        // 创建了新的 
+        // document.createElement('h1')
+        // document.createElement('span') 等，
+        // 然后再插入到 father，   全局变量 h1 成为游离节点。
+      }, 10)
+
+      setTimeout(_ => {
+        h1.innerHTML = 'h1 被动态修改'
+        // 此时的  全局h1对象 在文档中  不存在了。
+      }, 100)
+    }
+
+    
+    
+  </script>
+</body>
+</html>

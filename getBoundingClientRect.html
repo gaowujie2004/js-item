@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+</style>
+<title> 模拟 element.getBoundingClientRect() </title>
+</head>
+<body>
+  <div class="box1">111111</div>
+  <div class="box2">222222</div>
+  <style>
+    html {
+      height: 2000px;
+    }
+    .box1, .box2 {
+      height: 200px;
+      background-color: skyblue;
+      margin: 50vh 10px;
+    }
+  </style>
+  <script>
+    let $ = function(str) {
+      return document.querySelector(str)
+    }
+    let $$ = function(str) {
+        return Array.from(document.querySelectorAll(str))
+    }
+    let toRootTop = function(){
+      let toRootTop = 0
+      let element = this
+      let father = this.offsetParent
+      
+      // 为什么先 判断 father, 因为要 father.clientTop  如果father为null,
+      while (father) {
+        toRootTop += element.offsetTop + father.clientTop
+        element = element.offsetParent
+        father = element.offsetParent
+      }
+      return toRootTop
+    }
+    Object.defineProperty(HTMLElement.prototype, 'toRootTop', {get: toRootTop})
+    
+    let box1 = $('.box1')
+    let box2 = $('.box2')
+    let html = document.documentElement
+    let scrollFun = function(ev) {
+      let top = box1.toRootTop - html.scrollTop
+      console.log('原生的', box1.getBoundingClientRect().top)
+      console.log('手写的', top)
+    }
+
+    window.onscroll = scrollFun
+  </script>
+</body>
+</html>

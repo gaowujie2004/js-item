@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @keyframes change {
+      100% {
+        width: 100vw;
+
+      }
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      height: 5000px;
+      
+    }
+    
+    .target {
+      border: 20px solid #000;
+      position: relative;
+      height: 200px;
+      background-color: pink;
+      margin: 100px 0;
+    }
+
+    .foot {
+      top: 20px;
+      position: absolute;
+      height: 200px;
+      background-color: skyblue;
+      position: absolute;
+      width: -webkit-fill-available;
+      margin: 0 20px;
+    }
+    
+    
+    
+  </style>
+</head>
+<body>
+  <div class="target">
+    <div class="foot"></div>
+  </div>
+  
+  <script>
+    let func = function(){
+  // 方法1
+  // let el = this
+  // let toRootTop = 0
+  // while (el) {
+  //   let father = el.offsetParent
+  //   if (father === null) {
+  //     break
+  //   }
+  //   toRootTop += (el.offsetTop + father.clientTop)
+  //   el = father
+  // }
+  // return toRootTop
+  
+  // 方法2
+  let toRootTop = 0
+  let element = this
+  let father = this.offsetParent
+  
+  // 为什么先 判断 father, 因为要 father.clientTop  如果father为null,
+  while (father) {
+    toRootTop += element.offsetTop + father.clientTop
+    element = element.offsetParent
+    father = element.offsetParent
+  }
+  return toRootTop
+}
+    Object.defineProperty(HTMLElement.prototype, 'toRootTop', {get: func})
+
+    let dom = document.querySelector('.target')
+    let dom2 = document.querySelector('.foot')
+
+    
+    
+  </script>
+</body>
+</html>

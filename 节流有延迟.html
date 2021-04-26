@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html {
+    font-size: 18px;
+  }
+</style>
+<title> 节流 - 有延迟 </title>
+</head>
+<body>
+  <div class="box">
+    <pre>
+      是什么？
+        通过JS代码实现的， 能够让回调函数在一定时间内，只回调一次，而不是频繁回调。
+      为什么需要节流？
+        因为有些回调函数在短时间内触发的非常频繁，就比如 滚动事件， 若这个回调函数所执行时间过长，则造成 主线程阻塞， 页面渲染急剧卡顿
+        所以节流出现了，在一定时间内只能触发一次 回调函数。
+
+      版本
+        节流， 存在延迟。
+        第一次不会触发， 一定时间后执行。
+    </pre>
+      
+  </div>
+  <style>
+    .box {
+      width: 200px;
+      height: 200px;
+      background-color: skyblue;
+    } 
+  </style>
+  <script>
+    let $ = function(str) {
+      return document.querySelector(str)
+    }
+    let $$ = function(str) {
+        return Array.from(document.querySelectorAll(str))
+    }
+
+    
+    // 第一次 不触发
+    let jieLiu = function(cb, options = {duration:1000}) {
+      let duration = options.duration
+      let timeout = false 
+
+      // 以上变量 被保存起来。 在闭包中。
+      return function(...args) {
+        if (!timeout) {
+          timeout = setTimeout(_ => {
+            cb.call(this, ...args)
+            timeout = false
+          }, duration)
+        }
+      }
+    }
+
+    let clickFun = function() {
+      console.log('回调函数执行')
+    }
+    
+    $('.box').onclick = jieLiu(clickFun, {duration: 500})
+  </script>
+</body>
+</html>
