@@ -191,7 +191,6 @@
         race()  return 一个promise对象, 其结果由第一个完成(无论状态如何)的 promise决定
         */
 
-        
         return new Promise((resolve, reject) => {
             arr.forEach((p, index) => {
                 p.then(

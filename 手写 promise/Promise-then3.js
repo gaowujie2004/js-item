@@ -99,7 +99,6 @@
                                  //     value => resolve(value), // 当 result成功时,  return的 Promise对象 就会成功, value就是 返回的值
                                  //     reason => reject(reason)
                                  // )
-     
                                  result.then(resolve, reject)
                              } else { // 非Promise对象值
                                  resolve(result);

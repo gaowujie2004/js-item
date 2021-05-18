@@ -1,0 +1,47 @@
+3个实例属性: value \  status \ callbackQueue[ {}, {}, {} ]
+2个公共方法: then() \ catch 其中 then重点理解
+
+手写让我学到了: 注释的重要性 、错误捕获的深入理解 、 回调函数的高级使用 、 对Promise的流程更加清晰。
+
+p.then()  // then() 返回值， 是由内部回调函数决定的， 
+ 1、内部回调函数返回非Promise值 则then() 是成功的promise，则这是回调函数的return 值
+ 2、内部回调函数返回Promise值， 则then() 返回的不是 这个Promise， 而是状态 和 值 一致的，新的Promise实例
+ let p0 = Promise.reject(0)
+ let p1 = Promise.resolve(1).then(val => p0)
+      p1 === p0  // false 
+      但是 p1： Promise {<rejected>: 0} ， 即 失败值 和 状态都和 p0 一致，但是新的对象
+
+
+.then() 链式调用， .then() 默认先返回一个 pending 状态的Promise， 当其内部的回调函数执行完毕时， 状态才随着改变 ， 再开始把存起来的
+回调函数， 放入 微任务队列
+
+
+
+resolve(值) / reject(值)  函数调用背后执行了什么？
+1、改变实例promise的状态值
+2、改变实例promise的状态(只能改变一次，多次调用无效)
+3、执行实例promise的存储的回调数组(可能为空), 将回调函数放入微任务队列
+
+p.then(callback1, callback2) 函数调用背后做了什么？
+1、根据p的状态对 callback1， callback2 做出不同的处理
+      a. p状态是 pending， 则把callback1，callback2放入 p的存储数组中，临时存储
+      b. p状态是 fulfilled，则开始调用 callback1回调函数， p.then() 返回的promise， 与回调函数的返回值有关
+      c. p状态是 rejected， 则开始调用 callback2回调函数， p.then() 返回的promise， 与回调函数的返回值有关
+2、思考：
+      p一开始状态是 pending， 此时p.then(callback1, callback2)执行，.then() 会做个判断, 把两个回调函数，暂时放到 p 对象中的一个数组中。
+      n秒后p的状态变为fulfilled(即在定时器中执行了resolve()), 此时，即调用了 resovle()， 开始把 p 对象中的一个数组中所有回调函数放入 微任务队列
+
+
+      p一开始就是 fulfilled状态，即生成Promise实例时就调用了resolve
+      此时p.then(callback1, callback2)执行, .then() 执行，会判断p的状态，此时 立即把 对应的回调函数放入 微队列
+
+p.then(callback1, callback2) 为何能链式调用？
+      因为，.then() 调用，默认返回一个 等待的 promise。
+      当 callback1 或 callback2 执行时， p.then() 返回的promise 状态才会改变
+      callback1 或 callback2 返回值：
+            a. 非Promise实例对象， 则 回调函数返回值 作为 p.then() 变成 fulfilled状态的成功值, 即 p.then() => Promise{<fulfilled> callback1/2()}
+            b. Promise实例对象。 则p.then()返回一个 和 callbacl1/2() 一样状态 一样值得promise，但不和 callbacl1/2（）返回值不同。
+               在底层是， 递归调用
+
+
+

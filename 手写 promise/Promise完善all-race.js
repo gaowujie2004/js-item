@@ -136,7 +136,7 @@
         Promise对象: 这样的话, Promise.resolve() 返回的promise状态 由 value决定
     */
     Promise.resolve = function(value) {
-
+        // 不是规范里描述的
         return new Promise((resolve, reject) => {
             if (value instanceof Promise) {     //Promise值
                 value.then(resolve, reject);
