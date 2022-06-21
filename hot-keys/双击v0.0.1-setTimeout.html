@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+        </style>
+        <title>双击 v0.0.1 - 定时器版</title>
+    </head>
+    <body>
+        <style>
+            body {
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            button {
+                display: flex;
+                width: 200px;
+                height: 80px;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+        <button>双击我</button>
+
+        <script>
+            let btn = document.querySelector('button');
+            const handle = function () {
+                console.info(`%c🇨🇳执行了 -- OK`, 'font-size:25px;color:deeppink;');
+            };
+
+            // 双击 - 时间戳版
+            /**
+             * @param { duration } 空白持续的最长时间: 自第一次单击后， duration 时间内再次单击，即可触发双击事件。
+             */
+            function twoDown(duration = 900, dom = btn, event = handle) {
+                let firstDownTime = 0;
+                let clickCount = 0;
+
+                btn.addEventListener('click', (ev) => {
+                    clickCount++;
+
+                    if (clickCount === 1) {
+                        firstDownTime = Date.now();
+                    }
+
+                    if (clickCount === 2) {
+                        if (Date.now() - firstDownTime <= duration) {
+                            event();
+                        }
+                        firstDownTime = 0;
+                        clickCount = 0;
+                    }
+                });
+            }
+            twoDown();
+        </script>
+    </body>
+</html>

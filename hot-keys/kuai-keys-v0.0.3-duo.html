@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            .content {
+                font-size: 20px;
+                color: pink;
+            }
+        </style>
+        <title>连续键 支持两个以上的键</title>
+    </head>
+    <body>
+        <style></style>
+        GaoWuJiex
+        <input type="text" />
+
+
+        <p>
+            显示区：
+            <div class="content"></div>
+        </p>
+
+        <script>
+
+
+            const handleReload = () => {
+                console.info(`%c🇨🇳按下了----OK`, 'font-size:25px;color:deeppink;');
+            };
+
+            // 先按 key1 后按 key2
+            function continueKey(keys, duration = 1000, handle = handleReload, dom = document) {
+                let keypressCount = 0;
+                // 第一次 按下有效按键的时间
+                let beforeKeyTime = 0;
+                let curKey = '';
+
+
+                function resetState() {
+                    beforeKeyTime = 0;
+                    keypressCount = 0;
+                }
+                console.info(`%c🇨🇳开启。`, 'font-size:25px;color:deeppink;');
+
+                dom.addEventListener(
+                    'keyup',
+                    (ev) => {
+                        curKey = ev.key;
+                        
+                        // 判断所处 环境。
+                        if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA' || ev.target.isContentEditable) {
+                            if (curKey === 'Escape') {
+                                ev.target.blur();
+                            }
+                            return;
+                        }
+
+                        // 进入 期望按键
+                        //////////////////////////
+                        keypressCount++;
+
+
+                        const isValid = keys.some((bindKey, i) => (
+                            (curKey===bindKey) && (i+1===keypressCount)
+                        ));
+                        if (!isValid) { 
+                            // 已经 不符合了， 那就重置 比如多按下了。
+                            resetState();
+                            return;
+                        }
+
+
+                        
+                        
+
+                        // 若用 key1 key2 与 curKey 对比，当 key1 = key2时，就有问题。 
+                        // 第一个按下了 开启计时。
+                        if (keypressCount === 1) {
+                            beforeKeyTime = Date.now();
+                        }
+                        
+                        // if (keypressCount === 2) {
+                        //     // 有效
+                        //     if (Date.now() - beforeKeyTime <= duration) {
+                        //         handle(ev);
+                        //     }
+
+                        //     // 本次 消费完成 / 无论成功、失败
+                        //     resetState();
+                        // }
+                        
+                        
+                        for (let i=2; i<=keys.length; i++) {
+                            if ( keypressCount === i && (i!==keys.length)) {
+                                if (Date.now() - beforeKeyTime <= duration) {
+                                    // 间隔合格
+                                    beforeKeyTime = Date.now();
+                                } else {
+                                    // 间隔超时
+                                    resetState();
+                                    return;
+                                }
+                            }
+
+
+                            // 最后一个
+                            if ( keypressCount === i &&  (i === keys.length) ) {
+                                if (Date.now() - beforeKeyTime <= duration) {
+                                    handle(ev);
+                                }
+                                resetState();
+                            }
+                        }
+                    },
+                    true
+                );
+            }
+            
+            continueKey(['Meta', 'k'], 1000);
+            // document.addEventListener('keypress', (e) => {
+            //     console.log(e);
+            // });
+
+            // document.querySelector('input').addEventListener('keydown', (ev) => {
+            //     console.log('input', ev);
+            // });
+
+            // 功能键触发的事件 . altKey metaKey sheiftKey 也有效果。
+            // document.addEventListener('keydown', e => {
+            //     console.log('document',e);
+            //     // e.stopPropagation();
+            // }, true)
+        </script>
+    </body>
+</html>
+

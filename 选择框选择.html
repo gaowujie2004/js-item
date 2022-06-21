@@ -1,176 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>选择框选择</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      height: 3000px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .test {
-      width: 200px;
-      height: 200px;
-      background-color: pink;
-      margin: 5px;
-    }
-    .test-checked {
-      background-color: green;
-    }
-    .z {
-      --down-x: 0px;
-      --down-y: 0px;
-      --width:0px;
-      --height:0px;
-      --show-hidden: 0;
-      --x-right: 1;
-      --y-bottom: 1;
-      transform-origin: 0 0;
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>选择框选择</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                height: 3000px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .test {
+                width: 200px;
+                height: 200px;
+                background-color: pink;
+                margin: 5px;
+                box-shadow: 0 0 0 1px red;
+            }
+            .test-checked {
+                background-color: green;
+            }
+            .z {
+                --down-x: 0px;
+                --down-y: 0px;
+                --width: 0px;
+                --height: 0px;
+                --show-hidden: 0;
+                --x-right: 1;
+                --y-bottom: 1;
+                transform-origin: 0 0;
 
-      transform: scale(var(--x-right), var(--y-bottom));
-      will-change: left,right;
-      position: absolute;
-      left: var(--down-x);
-      top: var(--down-y);
-      width: var(--width);
-      height: var(--height);
-      background-color: rgba(0,0,0,.1);
-      border: 2px dashed #000;
+                transform: scale(var(--x-right), var(--y-bottom));
+                will-change: left, right;
+                position: absolute;
+                left: var(--down-x);
+                top: var(--down-y);
+                width: var(--width);
+                height: var(--height);
+                background-color: rgba(0, 0, 0, 0.1);
+                border: 2px dashed #000;
 
-      opacity: var(--show-hidden);
-    }
+                opacity: var(--show-hidden);
+            }
 
-    .z, .test {
-      user-select: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="z"></div>
-  <div class="test"></div>
-  <div class="test"></div>
-  <div class="test"></div>
-  <div class="test"></div>
+            .z,
+            .test {
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="z"></div>
+        <div class="test"></div>
+        <div class="test"></div>
+        <div class="test"></div>
+        <div class="test"></div>
 
-  <script>
-    let tests = document.querySelectorAll('.test')
-    let z = document.querySelector('.z')
-    let mouseObj = {
-      down: {
-        x: 0,
-        y: 0
-      },
-      up: {
-        x: 0,
-        y: 0
-      }
-    }
-    
-    function mousedownFun(ev) {
-      document.addEventListener('mousemove', mouseMoveFun, true)
-      mouseObj.down.x = ev.pageX
-      mouseObj.down.y = ev.pageY
+        <script>
+            let tests = document.querySelectorAll('.test');
+            let z = document.querySelector('.z');
+            let mouseObj = {
+                down: {
+                    x: 0,
+                    y: 0,
+                },
+                up: {
+                    x: 0,
+                    y: 0,
+                },
+            };
 
+            function mousedownFun(ev) {
+                document.addEventListener('mousemove', mouseMoveFun, true);
+                mouseObj.down.x = ev.pageX;
+                mouseObj.down.y = ev.pageY;
 
-      z.style.setProperty('--down-x', `${mouseObj.down.x}px`)
-      z.style.setProperty('--down-y', `${mouseObj.down.y}px`)
-      
-    }
+                z.style.setProperty('--down-x', `${mouseObj.down.x}px`);
+                z.style.setProperty('--down-y', `${mouseObj.down.y}px`);
+            }
 
-    function mouseMoveFun(ev) {
-      let style = z.style
-      let x = ev.pageX
-      let y = ev.pageY
-      let width = x - mouseObj.down.x
-      let height = y - mouseObj.down.y
+            function mouseMoveFun(ev) {
+                let style = z.style;
+                let x = ev.pageX;
+                let y = ev.pageY;
+                let width = x - mouseObj.down.x;
+                let height = y - mouseObj.down.y;
 
-      
-      if (width < 0) {
-        width = -width
-        style.setProperty('--x-right', -1)
-      } else {
-        style.setProperty('--x-right', 1)
-      }
+                if (width < 0) {
+                    width = -width;
+                    style.setProperty('--x-right', -1);
+                } else {
+                    style.setProperty('--x-right', 1);
+                }
 
-      if (height < 0) {
-        height = -height
-        style.setProperty('--y-bottom', -1)
-      } else {
-        style.setProperty('--y-bottom', 1)
-      }
-      z.style.setProperty('--show-hidden', 1)
-      z.style.setProperty('--width', width + 'px')
-      z.style.setProperty('--height', height + 'px')
+                if (height < 0) {
+                    height = -height;
+                    style.setProperty('--y-bottom', -1);
+                } else {
+                    style.setProperty('--y-bottom', 1);
+                }
+                z.style.setProperty('--show-hidden', 1);
+                z.style.setProperty('--width', width + 'px');
+                z.style.setProperty('--height', height + 'px');
 
-      // 如果鼠标经过了 当前 元素上, 那么返回这个元素引用
-      let isHover = document.querySelector('.test:hover')
-      isHover && isHover.classList.add('test-checked');
-      
-      
-      tests.forEach(el => {
-        if (isCoverage(el, z)) {
-          el.classList.add('test-checked')
-        }
-      })
-    }
+                // 如果鼠标经过了 当前 元素上, 那么返回这个元素引用
+                let isHover = document.querySelector('.test:hover');
+                isHover && isHover.classList.add('test-checked');
 
-    function mouseUpFun(ev) {
-      document.removeEventListener('mousemove', mouseMoveFun, true)
-      z.style.setProperty('--show-hidden', 0)
-      console.log('鼠标松开');
-    }
+                tests.forEach((el) => {
+                    if (isCoverage(el, z)) {
+                        el.classList.add('test-checked');
+                    }
+                });
+            }
 
-    document.addEventListener('mousedown', mousedownFun, true)
-    // document.addEventListener('mousemove', mouseMoveFun, true)
-    document.addEventListener('mouseup', mouseUpFun, true)
+            function mouseUpFun(ev) {
+                document.removeEventListener('mousemove', mouseMoveFun, true);
+                z.style.setProperty('--show-hidden', 0);
+                console.log('鼠标松开');
+            }
 
-    // let obs = new IntersectionObserver(([change]) => {
-    //   console.log(change) // 被覆盖就是false，反之true
-    //   if (!change.isVisible && change.isIntersecting>0.88) {
-    //     // console.log('被选中', change.target);
-    //     change.target.classList.add('test-checked')
-    //   }
-    // }, {
-    //   threshold: [1.0],
-    //   delay: 100, 
-    //   trackVisibility: true,
-    // })
-    // document.querySelectorAll('.test').forEach(el => obs.observe(el))
-    
-    /*
+            document.addEventListener('mousedown', mousedownFun, true);
+            // document.addEventListener('mousemove', mouseMoveFun, true)
+            document.addEventListener('mouseup', mouseUpFun, true);
+
+            // let obs = new IntersectionObserver(([change]) => {
+            //   console.log(change) // 被覆盖就是false，反之true
+            //   if (!change.isVisible && change.isIntersecting>0.88) {
+            //     // console.log('被选中', change.target);
+            //     change.target.classList.add('test-checked')
+            //   }
+            // }, {
+            //   threshold: [1.0],
+            //   delay: 100,
+            //   trackVisibility: true,
+            // })
+            // document.querySelectorAll('.test').forEach(el => obs.observe(el))
+
+            /*
       当前元素是否被其他元素覆盖住:
       document.elementFromPoint(x, y)
       返回这个坐标上 z轴最大得哪个元素
     */
-    function isCoverage(element, target) {
-      let {x,y,width,height} = element.getBoundingClientRect()
-      x ||= 0
-      y ||= 0
-      width ||= 0
-      height ||= 0
+            function isCoverage(element, target) {
+                let { x, y, width, height } = element.getBoundingClientRect();
+                x ||= 0;
+                y ||= 0;
+                width ||= 0;
+                height ||= 0;
 
-      let coverageElements = [
-        document.elementFromPoint(x, y),
-        document.elementFromPoint(x + width, y),
-        document.elementFromPoint(x + width, y + height),
-        document.elementFromPoint(x, y + height),
-      ]
+                let coverageElements = [
+                    document.elementFromPoint(x, y),
+                    document.elementFromPoint(x + width, y),
+                    document.elementFromPoint(x + width, y + height),
+                    document.elementFromPoint(x, y + height),
+                ];
 
-      return coverageElements.filter(el => el !== null).some(el => el === target)
-    }
-
-    
-
-
-    
-  </script>
-</body>
+                return coverageElements.filter((el) => el !== null).some((el) => el === target);
+            }
+        </script>
+    </body>
 </html>

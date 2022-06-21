@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+        </style>
+        <title>鼠标久按</title>
+    </head>
+    <body>
+        <style>
+            body {
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            button {
+                display: flex;
+                width: 200px;
+                height: 80px;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+        <button>点击我</button>
+
+        <script>
+            let btn = document.querySelector('button');
+            const handle = function () {
+                console.info(`%c🇨🇳执行了 -- OK`, 'font-size:25px;color:deeppink;');
+            };
+
+            /**
+             * 长按 触发。
+             */
+            function longDown(duration = 200, dom = btn, event = handle) {
+                let timeId;
+                let eventType;
+
+                btn.addEventListener('mousedown', (ev) => {
+                    eventType = ev.button;
+
+                    timeId = setTimeout(() => {
+                        handle(ev);
+                    }, duration);
+                });
+
+                btn.addEventListener('mouseup', (ev) => {
+                    clearTimeout(timeId);
+                });
+            }
+            // n毫秒后，开始执行 事件处理函数。
+            // longDown(450);
+        </script>
+    </body>
+</html>

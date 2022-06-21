@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+        </style>
+        <title>hotkeys-js 测试</title>
+        <script src="./hotkeys.js"></script>
+    </head>
+    <body>
+        <style></style>
+        <script>
+            // hotkeys('command+k', (ev) => {
+            //     console.log(ev);
+            // });
+
+            // keydown   keyup 是针对所有按键
+            // ----keydown 任何键都可以监听到，但功能键(大多数)一直按着不松开不会连续触发；字符键会连续触发。 keydown 功能键+其他键，其他键一直按着会触发，并且 Meta:true
+            // ----keyup   功能键Command + 其他按键  此时监听不到其他按键。
+
+            // keypress 针对字符按键
+
+            document.addEventListener('keydown', (ev) => {
+                console.log(ev);
+                ev.preventDefault();
+            });
+        </script>
+    </body>
+</html>

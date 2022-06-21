@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            .content {
+                font-size: 20px;
+                color: pink;
+            }
+        </style>
+        <title>连续键 、久按鼠标</title>
+    </head>
+    <body>
+        <style></style>
+        GaoWuJiex
+        <input type="text" />
+
+
+        <p>
+            显示区：
+            <div class="content"></div>
+        </p>
+
+        <script>
+
+
+            const handleReload = () => {
+                console.info(`%c🇨🇳按下了----OK`, 'font-size:25px;color:deeppink;');
+            };
+
+            // 先按 key1 后按 key2
+            function continueKey(key1, key2, duration = 1000, handle = handleReload, dom = document) {
+                let keypressCount = 0;
+                let timeId = 0;
+                let curKey = '';
+
+                function resetState() {
+                    timeId = 0;
+                    keypressCount = 0;
+                }
+
+                console.info(`%c🇨🇳开启。`, 'font-size:25px;color:deeppink;');
+
+                dom.addEventListener(
+                    'keyup',
+                    (ev) => {
+                        curKey = ev.key;
+                        console.log(curKey);
+                        
+                        // 判断所处 环境。
+                        if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') {
+                            if (ev.key === 'Escape') {
+                                ev.target.blur();
+                            }
+                            return;
+                        }
+                        keypressCount++;
+
+                        const isOk = (curKey === key1 && keypressCount===1) || (curKey === key2 && keypressCount===2);
+                        if (!isOk) { 
+                            console.info(`%c🇨🇳不通过`,'font-size:25px;color:deeppink;', );
+                            resetState();
+                            return;
+                        }
+                        
+
+                        // 若用 key1 key2 与 curKey 对比，当 key1 = key2时，就有问题。 
+                        if (keypressCount === 1) {
+                            timeId = setTimeout( resetState , duration);
+                        }
+                        
+
+                        if (keypressCount === 2) {
+                            clearInterval(timeId);
+                            resetState();
+
+                            handle(ev);
+                        }
+
+
+                    },
+                    true
+                );
+            }
+            continueKey('j', 'k', 250);
+            // document.addEventListener('keypress', (e) => {
+            //     console.log(e);
+            // });
+
+            document.querySelector('input').addEventListener('keydown', (ev) => {
+                console.log(ev, window.event);
+            });
+        </script>
+    </body>
+</html>
