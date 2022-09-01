@@ -75,8 +75,9 @@ class Timer {
       return;
     }
     this.isInit = true;
-    // 为何要赋值？
-    this.pauseTime = Date.now();
+
+    // pauseTime - startTime ，开头时的边界处理
+    this.startTime = Date.now();
     this.mySetInterval(this.callback, this.delay);
   }
 }
