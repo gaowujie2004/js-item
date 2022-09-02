@@ -5,19 +5,19 @@ class Timer {
     this.timerId = -1;
     this.pauseTime = 0;
     this.startTime = 0;
-    this.isInit = false;
     this.status = {
       pause: false,
       resume: false,
       install: false,
+      init: false,
     };
-    // 在一次生命周期中，定时器累计计时多久
+    // 在一次轮询中，定时器累计计时多久
     this.timerUseTimeOfUnit = 0;
   }
 
   // 清除定时器
   stop() {
-    // 没有安装定时器并且，是暂停状态
+    // 边界case
     if (!this.status.install) {
       return;
     }
@@ -30,7 +30,7 @@ class Timer {
 
   // 暂停
   pause() {
-    // 特殊边界case
+    // 边界case
     if (!this.status.install || this.status.pause) {
       return;
     }
@@ -44,6 +44,7 @@ class Timer {
 
   // 继续开始
   resume() {
+    // 边界case
     if (this.status.resume) {
       return;
     }
@@ -71,10 +72,10 @@ class Timer {
   }
 
   init() {
-    if (this.isInit) {
+    if (this.status.init) {
       return;
     }
-    this.isInit = true;
+    this.status.init = true;
 
     // pauseTime - startTime ，开头时的边界处理
     this.startTime = Date.now();
