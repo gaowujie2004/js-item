@@ -72,7 +72,7 @@ class Timer {
     console.log('安装定时器，delay： ', newDelay);
   }
 
-  // todo: 使用setTimeout，实现setInterval，为什么要这样做？
+  // todo: 用setTimeout，实现setInterval，为什么要这样做？
   mySetInterval(callback, timeout = this.delay) {
     // 定时器安装
     this.status.install = true;
@@ -96,7 +96,7 @@ class Timer {
     }
     this.status.init = true;
 
-    // todo: pauseTime - startTime ，开头时的边界处理
+    // todo: 确保 pauseTime - startTime 的正确性；开头时的边界处理
     this.startTime = Date.now();
     this.mySetInterval(this.callback, this.delay);
   }
